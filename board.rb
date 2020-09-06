@@ -50,7 +50,28 @@ class Board
       row, col = coord
       count += 1 if @grid[row][col].is_bomb? 
     end
-    count
+    return "_" if count == 0
+    count 
+  end
+
+  def show_board
+    board.each.with_index do |row|
+     puts row.join(" ")
+    end
+    true
+  end
+
+  def board
+    copy = @grid.map do |row|
+      row.map do |tile|
+        if tile.is_revealed? 
+          tile.to_s
+        else
+          "*"
+        end
+      end
+    end
+    copy
   end
 
 end
