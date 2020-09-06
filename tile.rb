@@ -14,6 +14,7 @@ class Tile
   end
 
   def reveal
+    return false if @flagged
     @revealed = true
   end
 
@@ -28,6 +29,7 @@ class Tile
   def flip_flag
     return false if @revealed
     @flagged == false ? @flagged = true : @flagged = false
+    true
   end
 
   def neighbors
