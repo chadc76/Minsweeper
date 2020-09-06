@@ -28,10 +28,14 @@ class Tile
       (-1..1).each do |second|
         new_row = row - first
         new_col = col - second
-        neighbors << [new_row, new_col] if new_row >= 0 && new_col >= 0 && [new_row, new_col] != @coordinates
+        neighbors << [new_row, new_col] if is_valid?(new_row) && is_valid?(new_col) && [new_row, new_col] != @coordinates
       end
     end
     neighbors
+  end
+
+  def is_valid?(num)
+    num >= 0 && num < 9
   end
 
   def neighbor_bomb_count(count)
