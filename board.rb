@@ -33,4 +33,24 @@ class Board
     open_spaces
   end
 
+  def set_fringe
+    (0...@grid.length).each do |row|
+      (0...@grid.length).each do |col|
+        next if @grid[row][col].is_bomb?
+        adj = @grid[row][col].neighbors
+        @grid[row][col].neighbor_bomb_count(count_neighbors(adj))
+      end
+    end
+    true
+  end
+
+  def count_neighbors(neighbors)
+    count = 0
+    neighbors.each do |coord|
+      row, col = coord
+      count += 1 if @grid[row][col].is_bomb? 
+    end
+    count
+  end
+
 end
