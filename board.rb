@@ -15,6 +15,14 @@ class Board
     true
   end
 
+  def set_tiles
+    self.find_open.each do |space|
+      row, col = space
+      @grid[row][col] = Tile.new("_", [row, col])
+    end
+    true
+  end
+
   def find_open 
     open_spaces = []
     (0...@grid.length).each do |row|
