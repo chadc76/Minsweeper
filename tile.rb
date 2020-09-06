@@ -17,6 +17,10 @@ class Tile
     @revealed = true
   end
 
+  def is_revealed?
+    @revealed == true
+  end
+
   def flip_flag
     return false if @revealed
     @flagged == false ? @flagged = true : @flagged = false
