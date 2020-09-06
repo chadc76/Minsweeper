@@ -66,12 +66,20 @@ class Board
       row.map do |tile|
         if tile.is_revealed? 
           tile.to_s
+        elsif tile.is_flagged?
+          "F"
         else
           "*"
         end
       end
     end
     copy
+  end
+
+
+  def flip_flag_space(coord)
+    row, col = coord
+    @grid[row][col].flip_flag
   end
 
 end
