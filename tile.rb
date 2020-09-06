@@ -1,4 +1,5 @@
 class Tile
+  require "colorize"
   attr_reader :type, :bomb
   def initialize(type, coordinates)
     @type = type
@@ -40,6 +41,31 @@ class Tile
 
   def neighbor_bomb_count(count)
     @type = count 
+  end
+
+  def to_s
+    if @type == :b
+      new_val = @type.to_s.colorize(:red)
+    elsif @type == 1
+      new_val = @type.to_s.colorize(:blue)
+    elsif @type == 2
+      new_val = @type.to_s.colorize(:green)
+    elsif @type == 3
+      new_val = @type.to_s.colorize(:yellow)
+    elsif @type == 4
+      new_val = @type.to_s.colorize(:magenta)
+    elsif @type == 5
+      new_val = @type.to_s.colorize(:cyan)
+    elsif @type == 6
+      new_val = @type.to_s.colorize(:light_green)
+    elsif @type == 7
+      new_val = @type.to_s.colorize(:light_blue)
+    elsif @type == 8
+      new_val = @type.to_s.colorize(:light_magenta)
+    else
+      new_val = @type
+    end
+    new_val
   end
 
 end
