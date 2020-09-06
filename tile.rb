@@ -34,4 +34,8 @@ class Tile
     neighbors
   end
 
+  def neighbor_bomb_count(count)
+    @type = count 
+  end
+
 end
