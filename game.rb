@@ -6,7 +6,8 @@ require "yaml"
 class Minesweeper
     attr_reader :board, :player
   def initialize(player)
-    @level = get_level
+    level = get_level
+    @level = level
     @board = Board.new(@level)
     @player = player
     @last_pos = []
@@ -30,6 +31,9 @@ class Minesweeper
     elapsed
     if board.won?
       puts "Congratulation, you won! You won in #{elapsed} seconds"
+      board.flag_mines
+      board.show_board
+      show_highscores(@level, elapsed)
     else
       puts "Sorry, you hit a mine at #{@last_pos}! You lose!"
     end
@@ -51,6 +55,12 @@ class Minesweeper
       level = gets.chomp.upcase
     end
     levels[level]
+  end
+
+  def show_highscores(level, time)
+    highscores = YAML.load(File.read("#{level}.yml"))
+    highscores.add_item(player, time.to_s)
+    highscores.print
   end
 
   def flags_placed
