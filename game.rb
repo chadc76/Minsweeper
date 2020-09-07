@@ -12,7 +12,7 @@ class Minesweeper
 
   def run
     system("clear")
-    @board.populate
+    @board.populate if @board.grid.flatten.all?{|el| el == " "}
     until game_over?
       take_turn
       system("clear")
@@ -50,7 +50,7 @@ class Minesweeper
     until valid_pos(pos)
       puts "#{player}, Enter the posistion you want to make your move at (ie. '1,1') or enter 'S' to save game:"
       response = gets.chomp
-      save_game if response == 'S'
+      save_game if response.upcase == 'S'
       pos = response.split(",").map(&:to_i)
     end
     pos
@@ -86,5 +86,27 @@ class Minesweeper
     File.open(name, "w") { |file| file.write(self.to_yaml) }
     puts "Game saved as #{name}"
     exit
+  end
+end
+
+if __FILE__ == $PROGRAM_NAME
+  system ("Clear")
+  puts "Welcome to Minsweeper"
+  puts "Type 'N' to begin a new game or 'L' to load a saved game"
+  response = ""
+  until response == "N" || response == "L"
+    response = gets.chomp
+  end
+
+  if response == "N"
+    puts "Enter name:"
+    name = gets.chomp
+    new_game = Minesweeper.new(name)
+    new_game.run
+  else
+    puts "Enter file name:"
+    name = gets.chomp
+    new_game = YAML.load(File.read(name))
+    new_game.run
   end
 end
