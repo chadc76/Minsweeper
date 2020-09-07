@@ -47,6 +47,12 @@ class Board
     open_spaces
   end
 
+  def reveal_bombs
+    @grid.each do |row|
+      row.each { |tile| tile.reveal if tile.is_bomb? && !tile.is_revealed? }
+    end
+  end
+
   def set_fringe
     (0...@grid.length).each do |row|
       (0...@grid.length).each do |col|
