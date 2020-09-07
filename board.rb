@@ -7,6 +7,12 @@ class Board
     @grid = Array.new(9){Array.new(9, " ")}
   end
 
+  def populate
+    set_bombs
+    set_tiles
+    set_fringe
+  end
+
   def set_bombs
     10.times do 
       row, col = self.find_open.sample
