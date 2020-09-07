@@ -8,12 +8,34 @@ class Minesweeper
     @player = player
   end
 
-  def turn
+  def run
+    system("clear")
+    @board.populate
+    until game_over?
+      take_turn
+      system("clear")
+    end
+    if board.won?
+      puts "Congratulation, you won!"
+      board.show_board
+    else
+      puts "Sorry, you hit a bomb! You lose!"
+      board.reveal_bombs
+      board.show_board
+    end
+    true
+  end
+
+  def take_turn
     board.show_board
     pos = get_pos
     move = get_move(pos)
     make_move(pos, move)
     board.show_board
+  end
+
+  def game_over?
+    board.won? || board.lose?
   end
 
   def make_move(pos, move)

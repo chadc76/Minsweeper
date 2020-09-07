@@ -13,7 +13,7 @@ class Board
     set_fringe
   end
 
-  def win?
+  def won?
     grid.flatten.all? { |tile| tile.is_bomb? || tile.is_revealed? }
   end
 
@@ -51,6 +51,7 @@ class Board
     @grid.each do |row|
       row.each { |tile| tile.reveal if tile.is_bomb? && !tile.is_revealed? }
     end
+    true
   end
 
   def set_fringe
