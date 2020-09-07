@@ -13,6 +13,10 @@ class Board
     set_fringe
   end
 
+  def win?
+    grid.flatten.all? { |tile| tile.is_bomb? || tile.is_revealed? }
+  end
+  
   def set_bombs
     10.times do 
       row, col = self.find_open.sample
