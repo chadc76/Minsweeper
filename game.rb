@@ -1,5 +1,6 @@
 require_relative "board.rb"
 require_relative "tile.rb"
+require "yaml"
 
 class Minesweeper
     attr_reader :board, :player
@@ -47,8 +48,10 @@ class Minesweeper
   def get_pos
     pos = nil
     until valid_pos(pos)
-      puts "#{player}, Enter the posistion you want to make your move at (ie. '1,1'):"
-      pos = gets.chomp.split(",").map(&:to_i)
+      puts "#{player}, Enter the posistion you want to make your move at (ie. '1,1') or enter 'S' to save game:"
+      response = gets.chomp
+      save_game if response == 'S'
+      pos = response.split(",").map(&:to_i)
     end
     pos
   end
@@ -77,4 +80,11 @@ class Minesweeper
     true 
   end
 
+  def save_game
+    puts "Enter file name:"
+    name = gets.chomp + ".yml"
+    File.open(name, "w") { |file| file.write(self.to_yaml) }
+    puts "Game saved as #{name}"
+    exit
+  end
 end
