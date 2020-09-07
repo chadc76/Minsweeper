@@ -8,6 +8,18 @@ class Minesweeper
     @player = player
   end
 
+  def turn
+    board.show_board
+    pos = get_pos
+    move = get_move(pos)
+    make_move(pos, move)
+    board.show_board
+  end
+
+  def make_move(pos, move)
+    move == "r" ? board.reveal_space(pos) : board.flip_flag_space(pos)
+  end
+
   def get_pos
     pos = nil
     until valid_pos(pos)
@@ -20,6 +32,7 @@ class Minesweeper
   def get_move(pos)
     puts "type 'r' if you want to reveal this space, type 'f' if you want to flag or unflag this space"
     move = gets.chomp
+    row, col = pos
     if move == "r" and board.grid[row][col].is_flagged?
       puts "you must unflag this posistion before you can reveal it"
       get_move(pos)
