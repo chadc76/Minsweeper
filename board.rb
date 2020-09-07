@@ -76,10 +76,26 @@ class Board
     copy
   end
 
-
   def flip_flag_space(coord)
     row, col = coord
     @grid[row][col].flip_flag
+  end
+
+  def reveal_space(coord)
+    row, col = coord
+    unless @grid[row][col].is_revealed?
+      @grid[row][col].reveal
+      if @grid[row][col].is_bomb?
+        return false
+      elsif grid[row][col].type.is_a?(Integer)
+        return true
+      else
+        @grid[row][col].neighbors.each do |coords|
+          reveal_space(coords)
+        end
+      end
+    end
+    true
   end
 
 end
