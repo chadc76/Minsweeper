@@ -5,7 +5,8 @@ require "yaml"
 class Minesweeper
     attr_reader :board, :player
   def initialize(player)
-    @board = Board.new
+    @level = get_level
+    @board = Board.new(@level)
     @player = player
     @last_pos = []
   end
@@ -21,11 +22,26 @@ class Minesweeper
       puts "Congratulation, you won!"
       board.show_board
     else
-      puts "Sorry, you hit a bomb at #{@last_pos}! You lose!"
-      board.reveal_bombs
+      puts "Sorry, you hit a mine at #{@last_pos}! You lose!"
+      board.flag_mines
       board.show_board
     end
     true
+  end
+
+  def get_level
+    levels = {"B" => "Beginner", "I" => "Intermediate", "E" => "Expert", "C" => "Custom"}
+    level = ""
+    until levels.has_key?(level)
+      system("clear")
+      puts "Enter level:"
+      puts "Beginner, 9x9 board with 10 mines, Enter 'B'"
+      puts "Intermediate, 16x16 board with 40 mines, Enter 'I'"
+      puts "Expert, 16x30 board with 99 mines, Enter 'E'"
+      puts "for a custom board, Enter 'C'"
+      level = gets.chomp.upcase
+    end
+    levels[level]
   end
 
   def take_turn
@@ -70,7 +86,7 @@ class Minesweeper
   def valid_pos(pos)
     return false if pos == nil 
     row, col = pos
-    if pos.length != 2 || row < 0 || row > 8 || col < 0 || col > 8
+    if pos.length != 2 || row < 0 || row > board.size[0] || col < 0 || col > board.size[1]
       puts "posistion is not valid!"
       return false
     elsif board.grid[row][col].is_revealed?
@@ -95,7 +111,7 @@ if __FILE__ == $PROGRAM_NAME
   puts "Type 'N' to begin a new game or 'L' to load a saved game"
   response = ""
   until response == "N" || response == "L"
-    response = gets.chomp
+    response = gets.chomp.upcase
   end
 
   if response == "N"

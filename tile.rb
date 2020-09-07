@@ -1,16 +1,17 @@
 class Tile
   require "colorize"
-  attr_reader :type, :bomb
-  def initialize(type, coordinates)
+  attr_reader :type, :mine
+  def initialize(type, coordinates, grid_size)
     @type = type
-    @bomb = is_bomb?
+    @mine = is_mine?
     @flagged = false
     @revealed = false
     @coordinates = coordinates
+    @grid_size = grid_size
   end
 
-  def is_bomb?
-    type == :b
+  def is_mine?
+    type == :m
   end
 
   def reveal
@@ -39,22 +40,26 @@ class Tile
       (-1..1).each do |second|
         new_row = row - first
         new_col = col - second
-        neighbors << [new_row, new_col] if is_valid?(new_row) && is_valid?(new_col) && [new_row, new_col] != @coordinates
+        neighbors << [new_row, new_col] if new_row_valid?(new_row) && new_col_valid?(new_col) && [new_row, new_col] != @coordinates
       end
     end
     neighbors
   end
 
-  def is_valid?(num)
-    num >= 0 && num < 9
+  def new_row_valid?(num)
+    num >= 0 && num < @grid_size[0]
   end
 
-  def neighbor_bomb_count(count)
+  def new_col_valid?(num)
+    num >= 0 && num < @grid_size[1]
+  end
+
+  def neighbor_mine_count(count)
     @type = count 
   end
 
   def to_s
-    if @type == :b
+    if @type == :m
       new_val = @type.to_s.colorize(:red)
     elsif @type == 1
       new_val = @type.to_s.colorize(:blue)
