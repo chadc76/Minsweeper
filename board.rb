@@ -69,8 +69,9 @@ class Board
   end
 
   def show_board
-    board.each.with_index do |row|
-     puts row.join(" ")
+    puts "  0 1 2 3 4 5 6 7 8"
+    board.each.with_index do |row,i|
+     puts "#{i} #{row.join(" ")}"
     end
     true
   end
