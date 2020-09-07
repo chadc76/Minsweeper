@@ -73,7 +73,7 @@ class Board
 
   def flag_mines
     @grid.each do |row|
-      row.each { |tile| tile.flip_flag if tile.is_mine? && !tile.is_revealed? }
+      row.each { |tile| tile.flip_flag if tile.is_mine? && !tile.is_revealed? && !tile.is_flagged?}
     end
     true
   end
@@ -125,7 +125,7 @@ class Board
         if tile.is_revealed? 
           tile.to_s
         elsif tile.is_flagged?
-          "F".colorize(:light_green)
+          "F".colorize(:red)
         else
           "*"
         end

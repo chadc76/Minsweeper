@@ -14,18 +14,26 @@ class Minesweeper
   def run
     system("clear")
     @board.populate if @board.grid.flatten.all?{|el| el == " "}
+    puts "#{flags_remaining_to_be_placed} flags left"
+    board.show_board
+    take_turn
+    starting = Time.now
     until game_over?
+      puts "#{flags_remaining_to_be_placed} mines remaining"
+      board.show_board
       take_turn
       system("clear")
     end
+    ending = Time.now
+    elapsed = ending - starting
+    elapsed
     if board.won?
-      puts "Congratulation, you won!"
-      board.show_board
+      puts "Congratulation, you won! You won in #{elapsed} seconds"
     else
       puts "Sorry, you hit a mine at #{@last_pos}! You lose!"
-      board.flag_mines
-      board.show_board
     end
+    board.flag_mines
+    board.show_board
     true
   end
 
@@ -44,12 +52,18 @@ class Minesweeper
     levels[level]
   end
 
+  def flags_placed
+    board.grid.flatten.count { |tile| tile.is_flagged?}
+  end
+
+  def flags_remaining_to_be_placed
+    board.num_of_mines - flags_placed
+  end
+
   def take_turn
-    board.show_board
     pos = get_pos
     move = get_move(pos)
     make_move(pos, move)
-    board.show_board
   end
 
   def game_over?
