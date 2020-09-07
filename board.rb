@@ -16,7 +16,11 @@ class Board
   def win?
     grid.flatten.all? { |tile| tile.is_bomb? || tile.is_revealed? }
   end
-  
+
+  def lose?
+    grid.flatten.any? { |tile| tile.is_bomb? && tile.is_revealed? }
+  end
+
   def set_bombs
     10.times do 
       row, col = self.find_open.sample
