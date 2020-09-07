@@ -1,5 +1,6 @@
 require_relative "board.rb"
 require_relative "tile.rb"
+require_relative "highscores.rb"
 require "yaml"
 
 class Minesweeper
