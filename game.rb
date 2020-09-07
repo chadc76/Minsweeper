@@ -6,6 +6,7 @@ class Minesweeper
   def initialize(player)
     @board = Board.new
     @player = player
+    @last_pos = []
   end
 
   def run
@@ -19,7 +20,7 @@ class Minesweeper
       puts "Congratulation, you won!"
       board.show_board
     else
-      puts "Sorry, you hit a bomb! You lose!"
+      puts "Sorry, you hit a bomb at #{@last_pos}! You lose!"
       board.reveal_bombs
       board.show_board
     end
@@ -40,6 +41,7 @@ class Minesweeper
 
   def make_move(pos, move)
     move == "r" ? board.reveal_space(pos) : board.flip_flag_space(pos)
+    @last_pos = pos
   end
 
   def get_pos
