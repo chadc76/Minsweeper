@@ -31,13 +31,13 @@ class Minesweeper
       puts "Congratulation, you won! You won in #{elapsed} seconds"
       board.flag_mines
       board.show_board
-      show_highscores(@level, elapsed)
+      show_highscores(@level, elapsed) unless @level == "Custom"
     else
       puts "Sorry, you hit a mine at #{@last_pos}! You lose!"
       board.flag_mines
       board.show_board
-      highscores = YAML.load(File.read("#{@level}.yml"))
-      highscores.print
+      highscores = YAML.load(File.read("#{@level}.yml")) unless @level == "Custom"
+      highscores.print  unless @level == "Custom"
     end
     true
   end
