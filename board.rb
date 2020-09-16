@@ -99,9 +99,9 @@ class Board
     count 
   end
 
-  def show_board
+  def show_board(b = board)
     puts "   #{(0...size[1]).to_a.join(" ")}"
-    board.each.with_index do |row, idx_1|
+    b.each.with_index do |row, idx_1|
       rows = ""
       row.each.with_index do |col, idx_2|
         if idx_2.to_s.length == 1
@@ -154,6 +154,30 @@ class Board
       end
     end
     true
+  end
+
+  def highlighted_board(pos)
+    copy = board.map do |row|
+      row.map do |tile|
+        tile
+      end
+    end
+    
+    copy.each_with_index do |row, idx_1|
+      row.each_with_index do |tile, idx_2|
+        if pos == [idx_1, idx_2]
+          if tile == "*"
+           copy[idx_1][idx_2] = "*".black.on_white
+          elsif tile == "F"
+            copy[idx_1][idx_2] = "F".red.on_white
+          else
+            copy[idx_1][idx_2] = tile.on_white
+          end
+        end
+      end
+    end
+
+    show_board(copy)
   end
 
 end

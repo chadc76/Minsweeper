@@ -2,6 +2,7 @@ require_relative "board.rb"
 require_relative "tile.rb"
 require_relative "highscores.rb"
 require "yaml"
+require "io/console"
 
 class Minesweeper
     attr_reader :board, :player
@@ -10,19 +11,16 @@ class Minesweeper
     @level = level
     @board = Board.new(@level)
     @player = player
-    @last_pos = []
+    @last_pos = [0,0]
   end
 
   def run
     system("clear")
     @board.populate if @board.grid.flatten.all?{|el| el == " "}
-    puts "#{flags_remaining_to_be_placed} flags left"
-    board.show_board
     take_turn
     starting = Time.now
     until game_over?
       puts "#{flags_remaining_to_be_placed} mines remaining"
-      board.show_board
       take_turn
       system("clear")
     end
@@ -74,10 +72,61 @@ class Minesweeper
     board.num_of_mines - flags_placed
   end
 
+  def move_on_board
+    system("clear")
+    puts "#{flags_remaining_to_be_placed} mines remaining"
+    board.highlighted_board(@last_pos)
+    puts "move to position or Hit TAB to save game:"
+    puts "Hit ENTER to reveal the space, Hit SPACE to flag a mine" 
+    puts
+    moves = ["UP ARROW", "DOWN ARROW", "LEFT ARROW", "RIGHT ARROW", "SPACE", "RETURN", "TAB"]
+    move = 0
+    until moves.include?(move)
+    move = show_single_key
+    end
+
+    case move
+    when "UP ARROW"
+      if @last_pos[0] == 0
+        return true
+      else
+       @last_pos[0] -= 1
+      end
+    when "DOWN ARROW"
+      if @last_pos[0] == board.size[0] - 1
+        return true
+      else
+        @last_pos[0] += 1
+      end
+    when "RIGHT ARROW"
+      if @last_pos[1] == board.size[1] - 1
+        return true
+      else
+        @last_pos[1] += 1
+      end
+    when "LEFT ARROW"
+      if @last_pos[1] == 0
+        return true
+      else
+        @last_pos[1] -= 1
+      end
+    when "RETURN"
+      return "r"
+    when "SPACE"
+      return "f"
+    when "TAB"
+      return "s"
+    end
+    true
+  end
+
   def take_turn
-    pos = get_pos
-    move = get_move(pos)
-    make_move(pos, move)
+    move = ""
+    until move == "r" || move == "f" || move == "s"
+      move = move_on_board
+    end
+    save_game if move == "s"
+    make_move(@last_pos, move)
   end
 
   def game_over?
@@ -86,42 +135,7 @@ class Minesweeper
 
   def make_move(pos, move)
     move == "r" ? board.reveal_space(pos) : board.flip_flag_space(pos)
-    @last_pos = pos
-  end
-
-  def get_pos
-    pos = nil
-    until valid_pos(pos)
-      puts "#{player}, Enter the posistion you want to make your move at (ie. '11') or enter 'S' to save game:"
-      response = gets.chomp
-      save_game if response.upcase == 'S'
-      pos = response.split("").map(&:to_i)
-    end
-    pos
-  end
-
-  def get_move(pos)
-    puts "type 'r' if you want to reveal this space, type 'f' if you want to flag or unflag this space"
-    move = gets.chomp
-    row, col = pos
-    if move == "r" and board.grid[row][col].is_flagged?
-      puts "you must unflag this posistion before you can reveal it"
-      get_move(pos)
-    end
-    move
-  end
-
-  def valid_pos(pos)
-    return false if pos == nil 
-    row, col = pos
-    if pos.length != 2 || row < 0 || row > board.size[0] || col < 0 || col > board.size[1]
-      puts "posistion is not valid!"
-      return false
-    elsif board.grid[row][col].is_revealed?
-      puts "that space has already been revealed"
-      return false
-    end
-    true 
+    false
   end
 
   def save_game
@@ -131,10 +145,65 @@ class Minesweeper
     puts "Game saved as #{name}"
     exit
   end
+
+  # Reads keypresses from the user including 2 and 3 escape character sequences.
+ def read_char
+   STDIN.echo = false
+   STDIN.raw!
+
+   input = STDIN.getc.chr
+   if input == "\e" then
+      input << STDIN.read_nonblock(3) rescue nil
+      input << STDIN.read_nonblock(2) rescue nil
+   end
+ ensure
+   STDIN.echo = true
+   STDIN.cooked!
+
+   return input
+ end
+ def show_single_key
+   c = read_char
+
+   case c
+   when " "
+     return "SPACE"
+   when "\t"
+     return "TAB"
+   when "\r"
+     return "RETURN"
+   when "\n"
+     return "LINE FEED"
+   when "\e"
+     return "ESCAPE"
+   when "\e[A"
+     return "UP ARROW"
+   when "\e[B"
+     return "DOWN ARROW"
+   when "\e[C"
+     return "RIGHT ARROW"
+   when "\e[D"
+     return "LEFT ARROW"
+   when "\177"
+     return "BACKSPACE"
+   when "\004"
+     return "DELETE"
+   when "\e[3~"
+     return "ALTERNATE DELETE"
+   when "\u0003"
+     puts "exit"
+     exit 0
+   when /^.$/
+     return "#{c.inspect}"
+   else
+     return  "#{c.inspect}"
+   end
+ end
 end
 
+system("clear")
+
 if __FILE__ == $PROGRAM_NAME
-  system ("Clear")
   puts "Welcome to Minsweeper"
   puts "Type 'N' to begin a new game or 'L' to load a saved game"
   response = ""

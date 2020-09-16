@@ -3,6 +3,9 @@ label: Beginner
 scores:
 - !ruby/object:Score
   name: chad
+  time: '117.3784078'
+- !ruby/object:Score
+  name: chad
   time: '118.2350756'
 - !ruby/object:Score
   name: chad
