@@ -36,9 +36,11 @@ class Minesweeper
       show_highscores(@level, elapsed)
     else
       puts "Sorry, you hit a mine at #{@last_pos}! You lose!"
+      board.flag_mines
+      board.show_board
+      highscores = YAML.load(File.read("#{@level}.yml"))
+      highscores.print
     end
-    board.flag_mines
-    board.show_board
     true
   end
 
@@ -61,6 +63,7 @@ class Minesweeper
     highscores = YAML.load(File.read("#{level}.yml"))
     highscores.add_item(player, time.to_s)
     highscores.print
+    File.open("#{level}.yml", "w") { |file| file.write(highscores.to_yaml) }
   end
 
   def flags_placed
@@ -89,10 +92,10 @@ class Minesweeper
   def get_pos
     pos = nil
     until valid_pos(pos)
-      puts "#{player}, Enter the posistion you want to make your move at (ie. '1,1') or enter 'S' to save game:"
+      puts "#{player}, Enter the posistion you want to make your move at (ie. '11') or enter 'S' to save game:"
       response = gets.chomp
       save_game if response.upcase == 'S'
-      pos = response.split(",").map(&:to_i)
+      pos = response.split("").map(&:to_i)
     end
     pos
   end

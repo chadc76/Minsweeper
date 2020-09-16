@@ -1,3 +1,9 @@
 --- !ruby/object:Highscores
 label: Beginner
-scores: []
+scores:
+- !ruby/object:Score
+  name: chad
+  time: '118.2350756'
+- !ruby/object:Score
+  name: chad
+  time: '209.682703'
