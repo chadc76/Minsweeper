@@ -1,11 +1,11 @@
 ./git_setup.sh
 
-rm -f minsweeper.zip
+rm -f minesweeper.zip
 cd ..
 
-zip -r minsweeper.zip minsweeper;
-mv minsweeper.zip minsweeper/;
+zip -r minesweeper.zip minesweeper;
+mv minesweeper.zip minesweeper/;
 
 
 echo ""
-echo "Your zip file lives in minsweeper.zip"
+echo "Your zip file lives in minesweeper.zip"
