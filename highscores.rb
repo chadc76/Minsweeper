@@ -41,7 +41,7 @@ class Highscores
     sort_by_time!
     @scores.each.with_index do |item, i|
       break if  i == 10
-      puts "#{(i + 1).to_s.ljust(INDEX_COL_WIDTH)} | #{item.name.ljust(ITEM_COL_WIDTH)} | #{item.time.ljust(DEADLINE_COL_WIDTH)}"
+      puts "#{(i + 1).to_s.ljust(INDEX_COL_WIDTH)} | #{item.name.ljust(ITEM_COL_WIDTH)} | #{item.time.to_s}s".ljust(DEADLINE_COL_WIDTH)
     end
     puts "-" * LINE_WIDTH
   end

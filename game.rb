@@ -59,7 +59,7 @@ class Minesweeper
 
   def show_highscores(level, time)
     highscores = YAML.load(File.read("#{level}.yml"))
-    highscores.add_item(player, time.to_s)
+    highscores.add_item(player, time)
     highscores.print
     File.open("#{level}.yml", "w") { |file| file.write(highscores.to_yaml) }
   end
@@ -146,7 +146,6 @@ class Minesweeper
     exit
   end
 
-  # Reads keypresses from the user including 2 and 3 escape character sequences.
  def read_char
    STDIN.echo = false
    STDIN.raw!

@@ -100,21 +100,12 @@ class Board
   end
 
   def show_board(b = board)
-    puts "   #{(0...size[1]).to_a.join(" ")}"
-    b.each.with_index do |row, idx_1|
+    b.each do |row|
       rows = ""
-      row.each.with_index do |col, idx_2|
-        if idx_2.to_s.length == 1
-          rows += "#{col} "
-        else
-          rows += "#{col}  "
-        end
+      row.each do |col|
+        rows += "#{col} "
       end
-      if idx_1.to_s.length == 1
-        puts "#{idx_1}  #{rows}"
-      else
-        puts "#{idx_1} #{rows}"
-      end
+      puts "#{rows}"
     end
     true
   end
