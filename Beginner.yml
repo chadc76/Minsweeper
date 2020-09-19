@@ -9,4 +9,13 @@ scores:
   time: 56.1263788
 - !ruby/object:Score
   name: chad
+  time: 79.1692986
+- !ruby/object:Score
+  name: chad
+  time: 103.7452283
+- !ruby/object:Score
+  name: chad
   time: 118.1356151
+- !ruby/object:Score
+  name: chad
+  time: 139.2403817
