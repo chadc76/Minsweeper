@@ -8,6 +8,9 @@ scores:
   name: chad
   time: 56.1263788
 - !ruby/object:Score
+  name: Tim
+  time: 78.2593687
+- !ruby/object:Score
   name: chad
   time: 79.1692986
 - !ruby/object:Score
